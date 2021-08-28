@@ -1,4 +1,5 @@
-﻿using IliaAssignment.Models.DB;
+﻿using Microsoft.Extensions.Configuration;
+using IliaAssignment.Models.DB;
 using IliaAssignment.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,6 +11,7 @@ namespace IliaAssignment.Data
 {
     public class ApplicationDBContext : DbContext
     {
+        public IConfiguration Configuration { get; }
         public DbSet<CustomerDB> CustomerDBs { get; set; }
         public DbSet<OrdersDB> OrdersDBs { get; set; }
         public DbSet<OrderStatusDB> OrderStatusDBs { get; set; }
@@ -17,6 +19,7 @@ namespace IliaAssignment.Data
         {
 
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrdersDB>()

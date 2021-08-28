@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace IliaAssignment
 {
     public class Startup
     {
+        public static IConfigurationRoot configuration;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
