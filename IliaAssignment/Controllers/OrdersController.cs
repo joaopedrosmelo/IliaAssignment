@@ -58,8 +58,28 @@ namespace IliaAssignment.Controllers
 
         // PUT api/<OrdersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult Put(int id, [FromBody] OrderStatusCodeDTO orderStatusCodeDTO)
         {
+            try
+            {
+                var order = _context.OrdersDBs.Where(o => o.ID == id).FirstOrDefault();
+                if (order == null)
+                    return BadRequest(JsonConvert.SerializeObject("Order não existe."));
+
+                var orderStatus = _context.OrderStatusDBs.Where(o => o.StatusCode == orderStatusCodeDTO.StatusCode).FirstOrDefault();
+                if (orderStatus == null)
+                    return BadRequest(JsonConvert.SerializeObject("OrderStatus não existe."));
+
+                order.OrderStatusDB = orderStatus;
+                order.IdStatus = orderStatusCodeDTO.StatusCode;
+                _context.Update(order);
+                _context.SaveChanges();
+                return Ok("Status alterado com sucesso.");
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
         }
     }
 }
