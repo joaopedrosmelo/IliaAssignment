@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace IliaAssignment.Models.DTO
 {
-    public class CustomerOrder
+    public class CustomerOrdersDTO : CustomerDTO
     {
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public List<Orders> Orders { get; set; }
+        public List<OrdersDTO> OrdersDTO { get; set; }
     }
 }

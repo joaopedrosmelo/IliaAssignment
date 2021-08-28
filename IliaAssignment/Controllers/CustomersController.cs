@@ -28,7 +28,7 @@ namespace IliaAssignment.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            var customers = _mapper.Map<List<Customer>>(_context.CustomerDBs.ToList());
+            var customers = _mapper.Map<List<CustomerDTO>>(_context.CustomerDBs.ToList());
             return Ok(JsonConvert.SerializeObject(customers));
         }
 
@@ -36,25 +36,25 @@ namespace IliaAssignment.Controllers
         [HttpGet("{id}")]
         public ActionResult Get(int id)
         {
-            var customerOrder = _mapper.Map<CustomerOrder>(_context.CustomerDBs.Include(c => c.OrdersDB).ThenInclude(c => c.OrderStatusDB).Where(c => c.ID == id && c.OrdersDB != null).FirstOrDefault());
+            var customerOrder = _mapper.Map<CustomerOrdersDTO>(_context.CustomerDBs.Include(c => c.OrdersDB).ThenInclude(c => c.OrderStatusDB).Where(c => c.ID == id && c.OrdersDB != null).FirstOrDefault());
             return Ok(JsonConvert.SerializeObject(customerOrder));
         }
 
         // POST api/<CustomersController>
         [HttpPost]
-        public ActionResult Post([FromBody] Customer customer)
+        public ActionResult Post([FromBody] CustomerDTO customerDTO)
         {
             Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,})+)$");
-            Match match = regex.Match(customer.Email);
-            if (match.Success && !String.IsNullOrEmpty(customer.Name))
+            Match match = regex.Match(customerDTO.Email);
+            if (match.Success && !String.IsNullOrEmpty(customerDTO.Name))
             {
                 try
                 {
-                    var clienteExistente = _context.CustomerDBs.Where(c => c.Email == customer.Email).FirstOrDefault();
+                    var clienteExistente = _context.CustomerDBs.Where(c => c.Email == customerDTO.Email).FirstOrDefault();
                     if (clienteExistente != null)
                         return BadRequest(JsonConvert.SerializeObject("Customer já cadastrado."));
 
-                    var customerDB = _mapper.Map<CustomerDB>(customer);
+                    var customerDB = _mapper.Map<CustomerDB>(customerDTO);
                     _context.Add(customerDB);
                     _context.SaveChanges();
                     return Ok("Cliente cadastrado com sucesso.");
@@ -68,7 +68,7 @@ namespace IliaAssignment.Controllers
             {
                 List<string> errorMessage = new List<string>();
 
-                if (String.IsNullOrEmpty(customer.Name))
+                if (String.IsNullOrEmpty(customerDTO.Name))
                     errorMessage.Add("O nome deve ser preenchido.");
                 if (!match.Success)
                     errorMessage.Add("E-mail inválido.");

@@ -32,7 +32,7 @@ namespace IliaAssignmentTests
 
             var customerController = new CustomersController(context, mapper);
 
-            var customer = new Customer()
+            var customer = new CustomerDTO()
             {
                 Name = Name,
                 Email = Email
@@ -55,7 +55,7 @@ namespace IliaAssignmentTests
 
             var customerController = new CustomersController(context, mapper);
 
-            var customer = new Customer()
+            var customer = new CustomerDTO()
             {
                 Name = Name,
                 Email = Email
@@ -76,7 +76,7 @@ namespace IliaAssignmentTests
 
             for (var i = 0; i < 2; i++)
             {
-                var customer = new Customer()
+                var customer = new CustomerDTO()
                 {
                     Name = "joao",
                     Email = "joao@teste.com"
@@ -95,7 +95,7 @@ namespace IliaAssignmentTests
             IniciaDependenciaDatabase("server=remotemysql.;uid=0pqPBpePtn;password=JwJG6Wrivv;database=0pqPBpePtn");
             var customerController = new CustomersController(context, mapper);
 
-            var customer = new Customer()
+            var customer = new CustomerDTO()
             {
                 Name = "Joao",
                 Email = "joao@teste.com"

@@ -12,14 +12,17 @@ namespace IliaAssignment.Profiles
     {
         public Profiles()
         {
-            CreateMap<CustomerDB, Customer>().ReverseMap();
-            CreateMap<CustomerDB, CustomerOrder>()
-                .ForMember(co => co.Orders, cdb => cdb.MapFrom(customer => customer.OrdersDB))
+            CreateMap<CustomerDB, CustomerDTO>().ReverseMap();
+            CreateMap<CustomerDB, CustomerOrdersDTO>()
+                .ForMember(co => co.OrdersDTO, cdb => cdb.MapFrom(customer => customer.OrdersDB))
                 .ReverseMap();
-            CreateMap<OrdersDB, Orders>()
-                .ForMember(o => o.Status, odb => odb.MapFrom(order => order.OrderStatusDB.StatusName))
+            CreateMap<OrdersDB, OrdersDTO>()
+                .ForMember(o => o.StatusName, odb => odb.MapFrom(order => order.OrderStatusDB.StatusName))
                 .ReverseMap();
-            CreateMap<OrderStatusDB, OrderStatus>().ReverseMap();
+            CreateMap<OrdersDB, OrderDTO>()
+                .ForMember(o => o.StatusCode, odb => odb.MapFrom(order => order.OrderStatusDB.StatusCode))
+                .ReverseMap();
+            CreateMap<OrderStatusDB, OrderStatusDTO>().ReverseMap();
         }
     }
 }

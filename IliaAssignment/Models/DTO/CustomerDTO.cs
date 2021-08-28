@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IliaAssignment.Models.DTO
 {
-    public class Customer
+    public class CustomerDTO
     {
         public string Name { get; set; }
         public string Email { get; set; }
