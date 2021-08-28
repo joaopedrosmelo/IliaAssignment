@@ -5,9 +5,11 @@ using IliaAssignment.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace IliaAssignment.Controllers
 {
@@ -42,25 +44,36 @@ namespace IliaAssignment.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] Customer customer)
         {
-            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,})+)$");
             Match match = regex.Match(customer.Email);
-            if (match.Success)
+            if (match.Success && !String.IsNullOrEmpty(customer.Name))
             {
                 try
                 {
+                    var clienteExistente = _context.CustomerDBs.Where(c => c.Email == customer.Email).FirstOrDefault();
+                    if (clienteExistente != null)
+                        return BadRequest(JsonConvert.SerializeObject("Customer já cadastrado."));
+
                     var customerDB = _mapper.Map<CustomerDB>(customer);
                     _context.Add(customerDB);
                     _context.SaveChanges();
                     return Ok("Cliente cadastrado com sucesso.");
                 }
-                catch (System.Exception)
+                catch
                 {
                     return StatusCode(500);
                 }
             }
             else
             {
-                return BadRequest("E-mail inválido.");
+                List<string> errorMessage = new List<string>();
+
+                if (String.IsNullOrEmpty(customer.Name))
+                    errorMessage.Add("O nome deve ser preenchido.");
+                if (!match.Success)
+                    errorMessage.Add("E-mail inválido.");
+
+                return BadRequest(JsonConvert.SerializeObject(errorMessage));
             }
         }
     }
