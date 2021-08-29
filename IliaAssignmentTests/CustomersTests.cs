@@ -9,14 +9,25 @@ using IliaAssignment.Profiles;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IliaAssignmentTests
 {
     public class CustomersTests
     {
-        private ApplicationDBContext context;
-        private IMapper mapper;
+        private ApplicationDBContext _context;
+        private string _connectionString;
+        private IMapper _mapper;
         public IConfiguration Configuration { get; }
+
+        public CustomersTests()
+        {
+            var config = IliaAssignmentTestsInterface.InitConfiguration();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddOptions();
+
+            _connectionString = config.GetConnectionString("DefaultConnection");
+        }
 
         //Faz testes com nome ou e-mail inválidos para registro
         [Theory]
@@ -30,7 +41,7 @@ namespace IliaAssignmentTests
         {
             IniciaDependenciaInMemoryDatabase();
 
-            var customerController = new CustomersController(context, mapper);
+            var customerController = new CustomersController(_context, _mapper);
 
             var customer = new CustomerDTO()
             {
@@ -53,7 +64,7 @@ namespace IliaAssignmentTests
         {
             IniciaDependenciaInMemoryDatabase();
 
-            var customerController = new CustomersController(context, mapper);
+            var customerController = new CustomersController(_context, _mapper);
 
             var customer = new CustomerDTO()
             {
@@ -72,7 +83,7 @@ namespace IliaAssignmentTests
         {
             IniciaDependenciaInMemoryDatabase();
 
-            var customerController = new CustomersController(context, mapper);
+            var customerController = new CustomersController(_context, _mapper);
 
             for (var i = 0; i < 2; i++)
             {
@@ -92,8 +103,8 @@ namespace IliaAssignmentTests
         [Fact]
         public void ErroDeConexadoBancoDeDados()
         {
-            IniciaDependenciaDatabase("server=remotemysql.;uid=0pqPBpePtn;password=JwJG6Wrivv;database=0pqPBpePtn");
-            var customerController = new CustomersController(context, mapper);
+            IniciaDependenciaDatabase();
+            var customerController = new CustomersController(_context, _mapper);
 
             var customer = new CustomerDTO()
             {
@@ -114,17 +125,17 @@ namespace IliaAssignmentTests
             var options = new DbContextOptionsBuilder<ApplicationDBContext>()
                 .UseInMemoryDatabase("ApplicationDBContext")
                 .Options;
-            context = new ApplicationDBContext(options);
+            _context = new ApplicationDBContext(options);
 
             IniciaMapeamento();
         }
-        private void IniciaDependenciaDatabase(string connectionString)
+        private void IniciaDependenciaDatabase()
         {
             //Inicia banco de dados 'temporário' para não afetar ambiente de produção
             var options = new DbContextOptionsBuilder<ApplicationDBContext>()
-                .UseMySql(connectionString)
+                .UseMySql(_connectionString)
                 .Options;
-            context = new ApplicationDBContext(options);
+            _context = new ApplicationDBContext(options);
 
             IniciaMapeamento();
         }
@@ -135,7 +146,7 @@ namespace IliaAssignmentTests
             {
                 cfg.AddProfile(new Profiles());
             });
-            mapper = config.CreateMapper();
+            _mapper = config.CreateMapper();
         }
     }
 }

@@ -11,14 +11,31 @@ using Microsoft.Extensions.Configuration;
 using System.Net;
 using FluentAssertions;
 using System.Linq;
+using Microsoft.Extensions.Options;
+using IliaAssignment.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IliaAssignmentTests
 {
     public class OrderStatusTest
     {
         private ApplicationDBContext context;
+        private IOptions<SMTP> _smtp;
+        private string _connectionString;
         private IMapper mapper;
         public IConfiguration Configuration { get; }
+
+        public OrderStatusTest()
+        {
+            var config = IliaAssignmentTestsInterface.InitConfiguration();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddOptions();
+            serviceCollection.Configure<SMTP>(config.GetSection("SMTP"));
+            var services = serviceCollection.BuildServiceProvider();
+
+            _smtp = services.GetService<IOptions<SMTP>>();
+            _connectionString = config.GetConnectionString("DefaultConnection");
+        }
 
         //Faz teste com Order inexistente
         [Fact]
@@ -26,7 +43,7 @@ namespace IliaAssignmentTests
         {
             IniciaDependenciaInMemoryDatabase();
 
-            var orderController = new OrdersController(context, mapper);
+            var orderController = new OrdersController(context, _smtp, mapper);
             
             var order = new OrderStatusCodeDTO()
             {
@@ -61,7 +78,7 @@ namespace IliaAssignmentTests
 
             customerController.Post(customer);
 
-            var orderController = new OrdersController(context, mapper);
+            var orderController = new OrdersController(context, _smtp, mapper);
 
             var order = new OrderDTO()
             {
@@ -114,7 +131,7 @@ namespace IliaAssignmentTests
 
             customerController.Post(customer);
 
-            var orderController = new OrdersController(context, mapper);
+            var orderController = new OrdersController(context, _smtp, mapper);
 
             var order = new OrderDTO()
             {
@@ -139,9 +156,9 @@ namespace IliaAssignmentTests
         [Fact]
         public void ErroDeConexadoBancoDeDados()
         {
-            IniciaDependenciaDatabase("server=remotemysql.;uid=0pqPBpePtn;password=JwJG6Wrivv;database=0pqPBpePtn");
+            IniciaDependenciaDatabase();
 
-            var orderController = new OrdersController(context, mapper);
+            var orderController = new OrdersController(context, _smtp, mapper);
 
             var order = new OrderStatusCodeDTO()
             {
@@ -165,11 +182,11 @@ namespace IliaAssignmentTests
 
             IniciaMapeamento();
         }
-        private void IniciaDependenciaDatabase(string connectionString)
+        private void IniciaDependenciaDatabase()
         {
             //Inicia banco de dados 'temporário' para não afetar ambiente de produção
             var options = new DbContextOptionsBuilder<ApplicationDBContext>()
-                .UseMySql(connectionString)
+                .UseMySql(_connectionString)
                 .Options;
             context = new ApplicationDBContext(options);
 
