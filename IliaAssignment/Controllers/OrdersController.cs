@@ -58,7 +58,9 @@ namespace IliaAssignment.Controllers
                 var emailController = new EmailController(_smtp);
                 string price = string.Format(CultureInfo.GetCultureInfo("pt-BR"), "{0:C}", orderDTO.Price);
                 string message = $"Order {orderDB.ID} com o Status - {orderStatus.StatusName} - registrada com sucesso. Valor Total: {price}";
-                emailController.EnviarEmail(customer.Name, customer.Email, "Order criada", message);
+
+                if (!emailController.EnviarEmail(customer.Name, customer.Email, "Order criada", message))
+                    message += message + " *Houve falha ao enviar e-mail de notificação.";
 
                 return Ok(message);
             }
@@ -90,7 +92,9 @@ namespace IliaAssignment.Controllers
                 var emailController = new EmailController(_smtp);
                 string price = string.Format(CultureInfo.GetCultureInfo("pt-BR"), "{0:C}", order.Price);
                 string message = $"Order {id} com novo Status - {orderStatus.StatusName}";
-                emailController.EnviarEmail(order.CustomerDB.Name, order.CustomerDB.Email, "Status da Order atualizada", message);
+                
+                if(!emailController.EnviarEmail(order.CustomerDB.Name, order.CustomerDB.Email, "Status da Order atualizada", message))
+                    message += message + " *Houve falha ao enviar e-mail de notificação.";
 
                 return Ok(message);
             }
