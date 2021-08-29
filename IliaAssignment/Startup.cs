@@ -1,4 +1,5 @@
 using IliaAssignment.Data;
+using IliaAssignment.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +31,8 @@ namespace IliaAssignment
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDBContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            var identitySettingsSection = Configuration.GetSection("SMTP");
+            services.Configure<SMTP>(identitySettingsSection);
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IliaAssignment.Models.DTO
 {
-    public class OrderStatus
+    public class OrderStatusDTO
     {
         public int StatusCode { get; set; }
         public string StatusName { get; set; }
