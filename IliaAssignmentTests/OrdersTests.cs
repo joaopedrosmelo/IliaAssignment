@@ -110,7 +110,23 @@ namespace IliaAssignmentTests
         [InlineData(100, 0, "Joao", "joao@teste.com")]
         public void CadastroOrderPriceValido(decimal Price, int StatusCode, string CustomerName, string CustomerEmail)
         {
-            IniciaDependenciaDatabase("server=remotemysql.com;uid=0pqPBpePtn;password=JwJG6Wrivv;database=0pqPBpePtn");
+            IniciaDependenciaInMemoryDatabase();
+
+            context.OrderStatusDBs.Add(new IliaAssignment.Models.DB.OrderStatusDB
+            {
+                StatusCode = 0,
+                StatusName = "Aguardando Pagamento"
+            });
+
+            var customerController = new CustomersController(context, mapper);
+
+            var customer = new CustomerDTO()
+            {
+                Name = CustomerName,
+                Email = CustomerEmail
+            };
+
+            customerController.Post(customer);
 
             var orderController = new OrdersController(context, mapper);
 
