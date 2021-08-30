@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <AssemblyName>IliaAssignment.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

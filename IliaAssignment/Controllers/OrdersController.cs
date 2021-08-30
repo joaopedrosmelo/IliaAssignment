@@ -64,7 +64,7 @@ namespace IliaAssignment.Controllers
 
                 return Ok(message);
             }
-            catch(Exception ex)
+            catch
             {
                 return StatusCode(500);
             }

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IliaAssignment", "IliaAssignment\IliaAssignment.csproj", "{FE975C96-C5A4-4ADB-BE5A-0830A7D90401}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IliaAssignment", "IliaAssignment\IliaAssignment.csproj", "{FE975C96-C5A4-4ADB-BE5A-0830A7D90401}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IliaAssignmentTests", "IliaAssignmentTests\IliaAssignmentTests.csproj", "{1E08A476-3AF8-400B-A516-FB25DEEA878B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IliaAssignment.Tests", "IliaAssignmentTests\IliaAssignment.Tests.csproj", "{1E08A476-3AF8-400B-A516-FB25DEEA878B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
