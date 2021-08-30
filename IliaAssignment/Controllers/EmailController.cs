@@ -1,14 +1,6 @@
-﻿using AutoMapper;
-using IliaAssignment.Data;
-using IliaAssignment.Models;
-using Microsoft.AspNetCore.Http;
+﻿using IliaAssignment.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MimeKit;
 

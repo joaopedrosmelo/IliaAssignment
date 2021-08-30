@@ -2,6 +2,7 @@
 using IliaAssignment.Data;
 using IliaAssignment.Models.DB;
 using IliaAssignment.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -9,11 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace IliaAssignment.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class CustomersController : ControllerBase
     {
@@ -25,6 +26,7 @@ namespace IliaAssignment.Controllers
             _mapper = mapper;
         }
         // GET: api/<CustomersController>
+        
         [HttpGet]
         public ActionResult Get()
         {
@@ -33,6 +35,7 @@ namespace IliaAssignment.Controllers
         }
 
         // GET api/<CustomersController>/5
+        
         [HttpGet("{id}")]
         public ActionResult Get(int id)
         {
@@ -41,6 +44,7 @@ namespace IliaAssignment.Controllers
         }
 
         // POST api/<CustomersController>
+        
         [HttpPost]
         public ActionResult Post([FromBody] CustomerDTO customerDTO)
         {
@@ -50,8 +54,8 @@ namespace IliaAssignment.Controllers
             {
                 try
                 {
-                    var clienteExistente = _context.CustomerDBs.Where(c => c.Email == customerDTO.Email).FirstOrDefault();
-                    if (clienteExistente != null)
+                    var customer = _context.CustomerDBs.Where(c => c.Email == customerDTO.Email).FirstOrDefault();
+                    if (customer != null)
                         return BadRequest(JsonConvert.SerializeObject("Customer já cadastrado."));
 
                     var customerDB = _mapper.Map<CustomerDB>(customerDTO);
