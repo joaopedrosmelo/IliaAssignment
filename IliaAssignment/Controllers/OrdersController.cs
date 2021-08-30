@@ -3,12 +3,12 @@ using IliaAssignment.Data;
 using IliaAssignment.Models;
 using IliaAssignment.Models.DB;
 using IliaAssignment.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -17,6 +17,7 @@ using System.Linq;
 namespace IliaAssignment.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class OrdersController : ControllerBase
     {

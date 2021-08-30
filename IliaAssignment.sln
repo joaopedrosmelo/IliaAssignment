@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IliaAssignment", "IliaAssig
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IliaAssignment.Tests", "IliaAssignmentTests\IliaAssignment.Tests.csproj", "{1E08A476-3AF8-400B-A516-FB25DEEA878B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IliaAssignment.Auth", "IliaAssignment.Auth\IliaAssignment.Auth.csproj", "{6877D2A1-058C-488E-ACE5-ADACDC4B2CD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1E08A476-3AF8-400B-A516-FB25DEEA878B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E08A476-3AF8-400B-A516-FB25DEEA878B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E08A476-3AF8-400B-A516-FB25DEEA878B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6877D2A1-058C-488E-ACE5-ADACDC4B2CD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6877D2A1-058C-488E-ACE5-ADACDC4B2CD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6877D2A1-058C-488E-ACE5-ADACDC4B2CD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6877D2A1-058C-488E-ACE5-ADACDC4B2CD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

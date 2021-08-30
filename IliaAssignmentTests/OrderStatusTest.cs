@@ -19,10 +19,10 @@ namespace IliaAssignmentTests
 {
     public class OrderStatusTest
     {
-        private ApplicationDBContext context;
+        private ApplicationDBContext _context;
         private IOptions<SMTP> _smtp;
         private string _connectionString;
-        private IMapper mapper;
+        private IMapper _mapper;
         public IConfiguration Configuration { get; }
 
         public OrderStatusTest()
@@ -43,7 +43,7 @@ namespace IliaAssignmentTests
         {
             IniciaDependenciaInMemoryDatabase();
 
-            var orderController = new OrdersController(context, _smtp, mapper);
+            var orderController = new OrdersController(_context, _smtp, _mapper);
             
             var order = new OrderStatusCodeDTO()
             {
@@ -62,13 +62,13 @@ namespace IliaAssignmentTests
         {
             IniciaDependenciaInMemoryDatabase();
 
-            context.OrderStatusDBs.Add(new OrderStatusDB
+            _context.OrderStatusDBs.Add(new OrderStatusDB
             {
                 StatusCode = 0,
                 StatusName = "Aguardando Pagamento"
             });
 
-            var customerController = new CustomersController(context, mapper);
+            var customerController = new CustomersController(_context, _mapper);
 
             var customer = new CustomerDTO()
             {
@@ -78,7 +78,7 @@ namespace IliaAssignmentTests
 
             customerController.Post(customer);
 
-            var orderController = new OrdersController(context, _smtp, mapper);
+            var orderController = new OrdersController(_context, _smtp, _mapper);
 
             var order = new OrderDTO()
             {
@@ -94,7 +94,7 @@ namespace IliaAssignmentTests
                 StatusCode = 9999
             };
             
-            var response = orderController.Put(context.OrdersDBs.FirstOrDefault().ID, orderStatus);
+            var response = orderController.Put(_context.OrdersDBs.FirstOrDefault().ID, orderStatus);
 
             response.Should().BeOfType<BadRequestObjectResult>()
                 .Which.StatusCode.Should().Be((int)(HttpStatusCode.BadRequest));
@@ -109,19 +109,19 @@ namespace IliaAssignmentTests
 
             IniciaDependenciaInMemoryDatabase();
 
-            context.OrderStatusDBs.Add(new OrderStatusDB
+            _context.OrderStatusDBs.Add(new OrderStatusDB
             {
                 StatusCode = StatusCode,
                 StatusName = "Aguardando Pagamento"
             });
 
-            context.OrderStatusDBs.Add(new OrderStatusDB
+            _context.OrderStatusDBs.Add(new OrderStatusDB
             {
                 StatusCode = StatusCodeUpdate,
                 StatusName = "Pedido em Preparação"
             });
 
-            var customerController = new CustomersController(context, mapper);
+            var customerController = new CustomersController(_context, _mapper);
 
             var customer = new CustomerDTO()
             {
@@ -131,7 +131,7 @@ namespace IliaAssignmentTests
 
             customerController.Post(customer);
 
-            var orderController = new OrdersController(context, _smtp, mapper);
+            var orderController = new OrdersController(_context, _smtp, _mapper);
 
             var order = new OrderDTO()
             {
@@ -147,7 +147,7 @@ namespace IliaAssignmentTests
                 StatusCode = StatusCodeUpdate
             };
 
-            var response = orderController.Put(context.OrdersDBs.FirstOrDefault().ID, orderStatus);
+            var response = orderController.Put(_context.OrdersDBs.FirstOrDefault().ID, orderStatus);
 
             response.Should().BeOfType<OkObjectResult>()
                 .Which.StatusCode.Should().Be((int)(HttpStatusCode.OK));
@@ -158,7 +158,7 @@ namespace IliaAssignmentTests
         {
             IniciaDependenciaDatabase();
 
-            var orderController = new OrdersController(context, _smtp, mapper);
+            var orderController = new OrdersController(_context, _smtp, _mapper);
 
             var order = new OrderStatusCodeDTO()
             {
@@ -178,7 +178,7 @@ namespace IliaAssignmentTests
             var options = new DbContextOptionsBuilder<ApplicationDBContext>()
                 .UseInMemoryDatabase("ApplicationDBContext")
                 .Options;
-            context = new ApplicationDBContext(options);
+            _context = new ApplicationDBContext(options);
 
             IniciaMapeamento();
         }
@@ -188,7 +188,7 @@ namespace IliaAssignmentTests
             var options = new DbContextOptionsBuilder<ApplicationDBContext>()
                 .UseMySql(_connectionString)
                 .Options;
-            context = new ApplicationDBContext(options);
+            _context = new ApplicationDBContext(options);
 
             IniciaMapeamento();
         }
@@ -199,7 +199,7 @@ namespace IliaAssignmentTests
             {
                 cfg.AddProfile(new Profiles());
             });
-            mapper = config.CreateMapper();
+            _mapper = config.CreateMapper();
         }
     }
 }
